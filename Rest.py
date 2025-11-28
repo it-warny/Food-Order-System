@@ -16,6 +16,7 @@ from enum import StrEnum, Enum
 class PROGRAM_INTRUCTIONS(StrEnum):
     EXIT = 'Exit'
     DEQUEUE = 'Completed'
+    LIST = "List"
 
 
 class ORDER_STATUS(Enum):
@@ -25,7 +26,7 @@ class ORDER_STATUS(Enum):
 
 
 def getTextInput():
-    return input("What is your order or your command? ").strip().capitalize()
+    return input("\nWhat is your order or your command? ").strip().capitalize()
 
 
 class Order:
@@ -60,27 +61,20 @@ class OrdersQueue:
             self.head.status = ORDER_STATUS.COMPLETED
             print(f"\nThe order {self.head.data} has been completed!")
             self.head = self.head.next
-            self.print_orders()
 
-    def print_orders(self):
-        current = self.head
-        while current:
-            print(current.data, end=" -> ")
-            current = current.next
+    def print_list(self):
+        if isinstance(self.head, Order):
+            self.head.status = PROGRAM_INTRUCTIONS.LIST
+            current = self.head
+            while current:
+                print(current.data, end=" -> ")
+                current = current.next
 
     def can_i_close(self):
         return not self.head
 
-    def quit_if_no_orders(self)
-        if self.head:
-            print("""The restaurant order's list is not empty.""")
-        else:
-            print("""Foi um prazer ter sua interação no Rest.PY! Até breve.\nRestaurante Fechado!""")
-            quit()
-
-
 def OpenRestaurant():
-    print("Welcome to Rest.PY")
+    print("Welcome to Rest.PY!")
     currentInput = ''
     orders = OrdersQueue()
 
@@ -88,16 +82,19 @@ def OpenRestaurant():
         currentInput = getTextInput()
         if currentInput:
             if currentInput == PROGRAM_INTRUCTIONS.EXIT:
-                if (orders.can_i_close()):
-                    print("""Foi um prazer ter sua interação no Rest.PY! Até breve.\nRestaurante Fechado!""")
+                if orders.can_i_close():
+                    print("""\nIt was a pleasure to have you at our restaurant.
+                    Rest.PY closed!""")
                     quit()
                 else:
-                    print("""The restaurant order's list is not empty.""")
-            elif currentInput == PROGRAM_INTRUCTIONS.DEQUEUE:
+                    print("""\nThe restaurant order's list is not empty.""") # Let the manager the name of the orders that need to be done before close the restaurant.
+            elif currentInput == PROGRAM_INTRUCTIONS.DEQUEUE: # If there are no orders to be completed, let the manager know.
                 orders.dequeue_order()
+            elif currentInput == PROGRAM_INTRUCTIONS.LIST:
+                print("\nWe still have the following order(s):")
+                orders.print_list()
             else:
                 new_order = Order(currentInput)
                 orders.enqueue_order(new_order)
-
 
 OpenRestaurant()

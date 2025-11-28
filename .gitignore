@@ -1,1 +1,22 @@
-.idea
+# --- Python Bytecode & Artifacts ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Virtual Environments ---
+env/
+venv/
+.env/
+.venv/
+
+# --- IDE Settings ---
+.idea/
+.vscode/
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- Environment Variables (Secrets) ---
+.env
