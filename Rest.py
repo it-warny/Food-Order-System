@@ -3,26 +3,30 @@
 from collections import deque
 # - A way to gather commands/information from the user (done)
 # - Collected information should be stored in a data structure (done)
-# - Methods to acess or modify the stored information (in progress)
-# - Define a status for the current order and inform the user when that status changes
-# - The manager should keep track of the current and new orders, perform updates on them in a non finite way.
+# - Methods to acess or modify the stored information (done)
+# - Define a status for the current order and inform the user when that status changes (done)
+# - The manager should keep track of the current and new orders, perform updates on them in a non finite way. (done)
 # - Command list orders
 # - Use decapitalize at all and remove blank spaces from the user's input (done)
 
 
 from enum import StrEnum, Enum
 
+
 class PROGRAM_INTRUCTIONS(StrEnum):
     EXIT = 'Exit'
     DEQUEUE = 'Completed'
+
 
 class ORDER_STATUS(Enum):
     PENDING = 1
     ENQUEUED = 2
     COMPLETED = 3
 
+
 def getTextInput():
     return input("What is your order or your command? ").strip().capitalize()
+
 
 class Order:
     def __init__(self, data):
@@ -31,7 +35,7 @@ class Order:
         self.next = None
 
     def setNextOrder(self, order):
-        self.next = order
+        self.next = Order
 
 
 class OrdersQueue:
@@ -43,13 +47,13 @@ class OrdersQueue:
             current = self.head  # auxiliary pointer
             while current.next:  # traverse all orders to find the last one
                 current = current.next  # visit the next node
-                print(f"\nThe order {self.head.data} has been created!")
             current.next = new_order  # insert new order at the end of the linked list
 
         else:  # if self.head is empty, then the orders list are nothing
             self.head = new_order  # then use the new order as the head of the list
+        print(f"\nThe order {new_order.data} has been created!")
+        new_order.status = ORDER_STATUS.ENQUEUED
         current = self.head
-
 
     def dequeue_order(self):
         if isinstance(self.head, Order):
@@ -64,6 +68,16 @@ class OrdersQueue:
             print(current.data, end=" -> ")
             current = current.next
 
+    def can_i_close(self):
+        return not self.head
+
+    def quit_if_no_orders(self)
+        if self.head:
+            print("""The restaurant order's list is not empty.""")
+        else:
+            print("""Foi um prazer ter sua interação no Rest.PY! Até breve.\nRestaurante Fechado!""")
+            quit()
+
 
 def OpenRestaurant():
     print("Welcome to Rest.PY")
@@ -74,15 +88,16 @@ def OpenRestaurant():
         currentInput = getTextInput()
         if currentInput:
             if currentInput == PROGRAM_INTRUCTIONS.EXIT:
-                print("""Foi um prazer ter sua interação no Rest.PY! Até breve.\nRestaurante Fechado!""")
-                quit()
+                if (orders.can_i_close()):
+                    print("""Foi um prazer ter sua interação no Rest.PY! Até breve.\nRestaurante Fechado!""")
+                    quit()
+                else:
+                    print("""The restaurant order's list is not empty.""")
             elif currentInput == PROGRAM_INTRUCTIONS.DEQUEUE:
                 orders.dequeue_order()
             else:
                 new_order = Order(currentInput)
                 orders.enqueue_order(new_order)
 
+
 OpenRestaurant()
-
-
-            # update previous order to point to the new one
