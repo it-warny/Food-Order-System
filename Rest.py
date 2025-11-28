@@ -1,13 +1,14 @@
-# Lets write a python program to simulate a food orders system where users can create
-# orders and the manager can see the current QUEUE and perform actions on it
-from collections import deque
+# Main goals on this project:
+
 # - A way to gather commands/information from the user (done)
 # - Collected information should be stored in a data structure (done)
 # - Methods to acess or modify the stored information (done)
 # - Define a status for the current order and inform the user when that status changes (done)
 # - The manager should keep track of the current and new orders, perform updates on them in a non finite way. (done)
-# - Command list orders
+# - Command list orders (done)
 # - Use decapitalize at all and remove blank spaces from the user's input (done)
+# - If there are no orders to be completed, let the manager know.
+# - Let the manager the name of the orders that need to be done before close the restaurant.
 
 
 from enum import StrEnum, Enum
@@ -18,12 +19,10 @@ class PROGRAM_INTRUCTIONS(StrEnum):
     DEQUEUE = 'Completed'
     LIST = "List"
 
-
 class ORDER_STATUS(Enum):
     PENDING = 1
     ENQUEUED = 2
     COMPLETED = 3
-
 
 def getTextInput():
     return input("\nWhat is your order or your command? ").strip().capitalize()
@@ -87,8 +86,8 @@ def OpenRestaurant():
                     Rest.PY closed!""")
                     quit()
                 else:
-                    print("""\nThe restaurant order's list is not empty.""") # Let the manager the name of the orders that need to be done before close the restaurant.
-            elif currentInput == PROGRAM_INTRUCTIONS.DEQUEUE: # If there are no orders to be completed, let the manager know.
+                    print("""\nThe restaurant order's list is not empty.""")
+            elif currentInput == PROGRAM_INTRUCTIONS.DEQUEUE:
                 orders.dequeue_order()
             elif currentInput == PROGRAM_INTRUCTIONS.LIST:
                 print("\nWe still have the following order(s):")
